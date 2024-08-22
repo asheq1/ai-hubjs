@@ -1,15 +1,26 @@
-async function loadAI(){
+async function loadAI(seeMore){
     const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`)
     const data = await res.json()
     const datum = data.data.tools;
-    showAI(datum)
+    showAI(datum, seeMore)
 
 }
 
-const showAI = (techs) =>{
+const showAI = (techs, seeMore) =>{
     const container = document.getElementById('container')
+    container.textContent = '';
 
-    techs = techs.slice(0, 6);
+    // see more btn hidden
+    const see_more = document.getElementById('see-more');
+    if(techs.length > 6 && !seeMore){
+        see_more.classList.remove('hidden')
+    } else{
+        see_more.classList.add('hidden')
+    }
+
+    if(!seeMore){
+        techs = techs.slice(0, 6);
+    }
     
     techs.forEach(tech =>{
         // console.log(tech)
@@ -47,6 +58,13 @@ const showAI = (techs) =>{
 
 }
 
+
+// see more functionality
+const seeMore = () =>{
+    loadAI(true)
+}
+
+// modal functionality 
 async function showDetails(id){
     console.log(id)
     const res =await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`)
@@ -75,8 +93,9 @@ const displayDetails = (details) =>{
                 ${details.pricing[2].price || 'No data available'}
             </div>    
         </div> 
-    `  
-      
+    `     
 }
+
+
 
 loadAI()
