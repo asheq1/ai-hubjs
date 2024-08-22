@@ -12,7 +12,7 @@ const showAI = (techs) =>{
     techs = techs.slice(0, 6);
     
     techs.forEach(tech =>{
-        console.log(tech)
+        // console.log(tech)
         const div = document.createElement('div');
         div.classList = `card card-compact bg-base-100 shadow-xl`
         div.innerHTML = `
@@ -35,15 +35,48 @@ const showAI = (techs) =>{
                 <div class="flex">
                     <img src="frame.png" alt="" />
                     <p class='ml-2'>${tech.published_in}</p>
-                    <a href="" class="text-blue-600 visited:text-purple-600 ...">
+
+                    <button onclick="showDetails('${tech.id}')" class="text-blue-600 visited:text-purple-600 flex items-center ml-2">
                         <img src="direction.png" alt="" />
-                    </a>
+                    </button>
                 </div>
             </div>
         `;
         container.appendChild(div)
     })
 
+}
+
+async function showDetails(id){
+    console.log(id)
+    const res =await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`)
+    const data = await res.json();
+    displayDetails(data.data)
+    
+    my_modal_3.showModal()
+}
+
+const displayDetails = (details) =>{
+    console.log(details)
+    const left_container = document.getElementById('modal-left');
+    left_container.innerHTML = `
+        <p>${details.description}</p>
+        <div class="flex">
+            <div>
+                ${details.pricing[0].plan || 'No data available'}
+                ${details.pricing[0].price || 'No data available'}
+            </div>
+            <div>
+                ${details.pricing[1].plan || 'No data available'}
+                ${details.pricing[1].price || 'No data available'}
+            </div> 
+            <div>
+                ${details.pricing[2].plan || 'No data available'}
+                ${details.pricing[2].price || 'No data available'}
+            </div>    
+        </div> 
+    `  
+      
 }
 
 loadAI()
