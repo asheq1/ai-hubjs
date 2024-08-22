@@ -21,7 +21,9 @@ const showAI = (techs, seeMore) =>{
     if(!seeMore){
         techs = techs.slice(0, 6);
     }
-    
+
+    // date array
+    let divsDates = []
     techs.forEach(tech =>{
         // console.log(tech)
         const div = document.createElement('div');
@@ -54,7 +56,22 @@ const showAI = (techs, seeMore) =>{
             </div>
         `;
         container.appendChild(div)
-    })
+
+        // store the div published date
+        divsDates.push({div: div, date: new Date(tech.published_in)})
+       
+    });
+    
+    // sorting by date 
+    document.getElementById('sortByDate').addEventListener('click', () =>{
+
+        container.innerHTML = '';
+        // sorrt the array by date
+        divsDates.sort((a, b) => a.date - b.date);
+
+        // append the sorted divs 
+        divsDates.forEach(item => container.appendChild(item.div))
+    });
 
 }
 
